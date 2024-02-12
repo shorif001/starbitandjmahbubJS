@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>JSON</h1>
+    <h2>Javascript Object Notation</h2>
+
+    <ul id="users-container"></ul>
+
+    <div>
+      <input type="text" id="title" placeholder="title" /><br />
+      <input
+        type="text"
+        id="bodyContent"
+        placeholder="post er main jinish"
+      /><br />
+      <button id="submit">Test</button>
+    </div>
+
+    <script>
+      // JSON = Javascript Object Notation
+
+      // JSON, JSON Structure, parse, stringify, JSON Properties
+
+      const userObjectName = {
+        id: 245,
+        name: "masud",
+        friendAge: [12, 45, 56],
+        lover: { name: "jamila", favFood: "pizza" },
+        friends: ["kamal", "jamal", "salam"],
+      };
+
+      /*
+   js object k jodi string a convert korte chai
+   const userStringData = JSON.stringify(userObjectName)
+   r jodi
+   js string k js object a convert korte chai JSON.parse(userStringData)
+
+   //stringify korar shubidha hosse backend theke data pathaite shubida hoy.
+      //frontend data pawar por parse kore nite hobe
+
+  */
+
+      const userStringData = JSON.stringify(userObjectName);
+      // console.log('userStringData: ', userStringData)
+      //output: {"id":245,"name":"masud","friendAge":[12,45,56],"friends":["kamal","jamal","salam"]}
+
+      const userObjectData = JSON.parse(userStringData);
+      // console.log("userObjectData:", userObjectData)
+
+      /*
+  ekhon kotha hosse JSON diye ki korbo?
+
+  main kaj hosse:
+  ami jokhon server theke data load korbo! mone kori 1ta user er jonno
+  joto gulo post hoise ba comment ase shei data ba comment gulo nibo.
+  server theke jokhon data ashbe. 99% data ashe JSON string formate a.
+  ekhon string er bhitore j property gulo ase sheigulo ami read korte
+  parbo na. tai
+  JSON object ba JSON.parse(userStringData) te convert kore nite hobe.
+
+  JSON er moddhe koyekta jinish thake eta hosse:
+  number, string, array, object.
+
+  backend theke string data pathate shubida hoy tai beshir bag shomoy
+  backend dev string data pathay.
+  tai amader json object data te converte kore nite hoy.
+  */
+
+      //// Load data, JSON placeholder, GET data, display data on UI
+
+      /*
+
+  */
+
+      //backend server theke data ta ki kore call korbo:
+
+      fetch("https://jsonplaceholder.typicode.com/users")
+        .then((response) => response.json()) // json() = JSON.stringify()
+        // ei json tai hosse 10ta user
+        // .then(json => console.log(json))// json = JSON.parse()
+        .then((json) => displayUser(json)); // json = JSON.parse()
+
+      // ei url er data gulai website a dekhate chai
+      // simple bhabe
+
+      function displayUser(userss) {
+        // console.log("10 users", user)
+        //
+        //ekhane 10 ta object ase amara jodi ei prottekta object er name gulo nite chai
+        // for loop ba map chaliye prottekta object er bhitore dukte hobe
+        // r object er bhitor name property nite hobe
+        //
+
+        // // map loop diye:
+        // const userNames = userss.map((x) => {
+        //   // console.log(x);
+        //   console.log(x.name);
+        // });
+
+        // for loop diye:
+        const ul = document.getElementById("users-container");
+        for (let i = 0; i < userss.length; i++) {
+          const user = userss[i]; // 1ta 1ta kore user ashse
+          // console.log("user:", user);
+          const li = document.createElement("li");
+          li.innerText = user.name;
+          ul.appendChild(li);
+        }
+      }
+
+      //// HTTP request, status code, network tab, bad api
+      /*
+      permission hosse: ashshosto kora j ami data dibo. 100% data dibe bishoy ta emon na.
+      ami j datar jonno request korbo. data server theke ashtew pare naw ashte pare
+      hoyto data ashbe na-hole error dibe.
+
+      request ta 2 rokomer hote pare:
+      success hote pare
+      failed hote pare
+
+      then catch, async await
+      */
+
+      //// send data to the server, HTTP POST Method, GET vs POST
+      /*
+      http request ki ki ase ?
+      get, post, put, delete, patch
+      */
+
+      document.getElementById("submit").addEventListener("click", function () {
+        const title = document.getElementById("title").value;
+        const bodyContent = document.getElementById("bodyContent").value;
+        const post = {
+          title: title,
+          body: bodyContent,
+        };
+        nowPostToServer(post);
+      });
+
+      function nowPostToServer(postInfo) {
+        fetch("https://jsonplaceholder.typicode.com/posts", {
+          method: "POST",
+          body: JSON.stringify(
+            postInfo
+            // /*object-variable-name*/ {
+            //   // ei object ta fetch er baire ekta variable er moddew thakte pare.
+            //   // r tokhon ei object er poriborte oi bairer object er object-variable-name ta ei khane hobe.
+            //   title: " ",
+            //   body: " ",
+            //   userId: 1,
+            // }
+          ),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => console.log(data));
+      }
+
+      // kibhabe ekta post request jay:
+      /*
+      ekta method jabe j eta kon request "POST",
+      ekta body lagbe: body te json stringify kore object pathabo object a ki ki property er
+      value thakbe ta bole dibo.
+      r ekta headers lagbe : ami j content gulo pathassi shei gulo json data pathassi.
+      */
+    </script>
+  </body>
+</html>
